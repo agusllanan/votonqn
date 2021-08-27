@@ -1,12 +1,11 @@
 import React, { Fragment, useState, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ArchiveIcon } from "@heroicons/react/outline";
 import { Helmet } from "react-helmet";
 import Modal from "./Modal";
 import ReCAPTCHA from "react-google-recaptcha";
 import footer from "../assets/img/footer.png";
 import icono from "../assets/img/icono.png";
-
+import { XIcon, ArchiveIcon } from "@heroicons/react/outline";
 
 const AddInfo = () => {
     const [dni, setDni] = useState("");
@@ -31,9 +30,7 @@ const AddInfo = () => {
         (tempDni.length !== 8 && tempDni.length !== 7 && tempDni.length !== 0)
     ) {
         setError(true);
-        setMensajeError(
-        "Debe ingresar un DNI valido"
-        );
+        setMensajeError("Debe ingresar un DNI valido");
     } else {
         setError(false);
         setMensajeError("");
@@ -48,7 +45,7 @@ const AddInfo = () => {
         setCaptchaMensaje("");
     }
     }
-    
+
     function handleVerification(e) {
     e.preventDefault();
     if (captcha.current.getValue()) {
@@ -56,7 +53,6 @@ const AddInfo = () => {
         setCaptchaValido(true);
         setCaptchaMensaje("");
         setOpen(true);
-    
     } else {
         setCaptchaValido(false);
         setError(true);
@@ -64,7 +60,6 @@ const AddInfo = () => {
         console.log("Captcha invalido");
     }
     }
-
 
     return (
     <>
@@ -86,7 +81,7 @@ const AddInfo = () => {
                     Para comenzar <br />
                     necesitamos los datos <br />
                     personales del ciudadano
-                </p>    
+                </p>
                 </div>
                 <div className="">
                 <label
@@ -106,7 +101,7 @@ const AddInfo = () => {
                 />
                 {error && (
                     <p className="text-red-400 text-base">{errorMensaje}</p>
-                )}  
+                )}
                 </div>
                 <div className="pt-4">
                 <ReCAPTCHA
@@ -117,10 +112,10 @@ const AddInfo = () => {
                 />
                 </div>
                 {captchaValido !== true && (
-                    <div className="text-red-400 text-base">
-                        <p>{captchaMensaje}</p>
-                    </div>
-                    )}
+                <div className="text-red-400 text-base">
+                    <p>{captchaMensaje}</p>
+                </div>
+                )}
                 <div>
                 <button
                     className="w-full mt-6 text-indigo-50 font-bold bg-blue-500 py-3 rounded-full hover:bg-blue-600 transition duration-200"
@@ -152,14 +147,10 @@ const AddInfo = () => {
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
             >
-                <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <Dialog.Overlay className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
             </Transition.Child>
-
             {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-                className="hidden align-middle h-screen"
-                aria-hidden="true"
-            >
+            <span className="hidden align-middle h-screen" aria-hidden="true">
                 &#8203;
             </span>
             <Transition.Child
@@ -171,44 +162,50 @@ const AddInfo = () => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
             >
-                <div className="inline-block bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8 align-middle max-w-lg w-full">
+                <div className="inline-block bg-white rounded-lg text-left shadow-xl transform transition-all my-8 align-middle max-w-lg w-full">
                 <div className="bg-white px-4 max pt-5 p-6 pb-4">
-                    <div className="flex-shrink-0 flex items-center overflow-hidden justify-center py-4 h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
-                    <ArchiveIcon
+                    <div className="flex justify-between">
+                    <div className="flex-shrink-0 flex items-center justify-center py-4 h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <ArchiveIcon
                         className="h-6 w-6 text-blue-600"
                         aria-hidden="true"
-                    />
+                        />
+                    </div>
+                    <div className="flex-shrink-0 flex items-center justify-center py-4 h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10 hover:bg-red-50">
+                        <XIcon
+                        className="h-6 w-6 text-red-500 cursor-pointer duration-75 hover:"
+                        aria-hidden="true"
+                        onClick={() => {
+                            window.grecaptcha.reset();
+                            setError(false);
+                            setMensajeError("");
+                            setOpen(false);
+                            setDni("");
+                            setCaptchaValido(null);
+                            }}                      />
+                    </div>
                     </div>
                     <div className="flex items-start">
-                    <div className="mt-3 w-full text-left sm:mt-0 sm:ml-4 sm:text-left">
-                        <Dialog.Title
-                        as="h3"
-                        className="text-lg leading-6 py-2 font-medium text-blue-900"
-                        >
-                        Sus datos son los siguientes:
-                        <Modal dni={dni} />
-                        </Dialog.Title>
+                    <div className="mt-3 w-full text-left sm:mt-0 sm:text-left">
+                        {/* !!!!!!!!!!!!!!!! ACá ESTA EL MODAL !!!!!!!! */}
+                        <Modal dni={dni}/>
+                        {/* !!!!!!!!!!!!!!!! ACá ESTA EL MODAL !!!!!!!! */}
                     </div>
                     </div>
                     {error && (
-                    <p className="text-red-400 text-center font-bold text-base">{errorMensaje}</p>
+                    <p className="text-red-400 text-center font-bold text-base">
+                        {errorMensaje}
+                    </p>
                     )}
                 </div>
-                <div className="bg-gray-50 px-4 max-h-screen py-3 sm:px-6 flex flex-col">
+                {/* <div className="bg-gray-50 px-4 max-h-screen py-3 sm:px-6 flex flex-col">
                     <button
                     type="button"
                     className=" justify-center rounded-md border border-red-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-red-400 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
-                    onClick={() => {
-                        setError(false);
-                        setMensajeError("");
-                        setOpen(false);
-                        setDni("");
-                        setCaptchaValido(null);
-                    }}
                     >
                     Cerrar
                     </button>
-                </div>
+                </div> */}
                 </div>
             </Transition.Child>
             </div>
