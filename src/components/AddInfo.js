@@ -14,6 +14,7 @@ const AddInfo = () => {
     const [open, setOpen] = useState(false);
     const [captchaValido, setCaptchaValido] = useState(null);
     const [captchaMensaje, setCaptchaMensaje] = useState("");
+    let completeButtonRef = useRef(null);
 
     // const {register, watch, errors} = useForm();
 
@@ -135,6 +136,7 @@ const AddInfo = () => {
             as="div"
             auto-reopen="true"
             className="fixed z-10 inset-0 overflow-y-auto"
+            initialFocus={completeButtonRef}
             onClose={setOpen}
         >
             <div className=" min-h-screen pt-4 px-4 pb-20 text-center block ">
@@ -188,7 +190,7 @@ const AddInfo = () => {
                     <div className="flex items-start">
                     <div className="mt-3 w-full text-left sm:mt-0 sm:text-left">
                         {/* !!!!!!!!!!!!!!!! ACá ESTA EL MODAL !!!!!!!! */}
-                        <Modal dni={dni}/>
+                        <Modal completeButtonRef={completeButtonRef} dni={dni}/>
                         {/* !!!!!!!!!!!!!!!! ACá ESTA EL MODAL !!!!!!!! */}
                     </div>
                     </div>

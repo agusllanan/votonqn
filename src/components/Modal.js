@@ -3,7 +3,7 @@ import axios from "axios";
 import { Dialog } from "@headlessui/react";
 // import icono from "../assets/img/icono.png";
 
-export default function Modal({props}) {
+export default function Modal({ dni, completeButtonRef }) {
   const [datos, setDatos] = useState(null);
   const [email, setEmail] = useState("");
   const [error, setError] = useState(false);
@@ -42,7 +42,6 @@ export default function Modal({props}) {
   }
 
   const validarEmail = () => {
-    
     let hayError = false;
 
     if (email.length === 0) {
@@ -57,19 +56,18 @@ export default function Modal({props}) {
       setError(false);
       hayError = false;
       setMensajeError("");
-      console.log("El email es valido")
+      console.log("El email es valido");
     }
 
-    return (hayError)
-
+    return hayError;
   };
 
   const asignarEmail = (e) => {
-    setEmail(e.target.value)
-  }
+    setEmail(e.target.value);
+  };
 
   var data = JSON.stringify({
-    PadNroDoc: props.dni,
+    PadNroDoc: dni,
   });
 
   async function getDatos() {
@@ -97,13 +95,18 @@ export default function Modal({props}) {
 
   return (
     <>
-      { !datos ? (
+      {!datos ? (
         <div>
-          <p className="font-medium text-xl py-4 text-red-400">
-            No hemos encontrado datos con ese número <br /> de DNI en el padrón
-            electoral. <br />
-            Cierre la ventana y vuelva a intentarlo.
-          </p>
+          <Dialog.Title>
+            <div className="flex flex-col">
+              <p className="font-medium sm:text-base sm: lg:text-xl py-4 text-justify text-red-400">
+                No hemos encontrado datos con ese número <br /> de DNI en el
+                padrón electoral. <br />
+                Cierre la ventana y vuelva a intentarlo.
+              </p>
+              <button ref={completeButtonRef} className="hidden"></button>
+            </div>
+          </Dialog.Title>
         </div>
       ) : (
         <div>
@@ -158,11 +161,12 @@ export default function Modal({props}) {
           <button
             onClick={(e) => {
               e.preventDefault();
-              if (!validarEmail()){
+              if (!validarEmail()) {
                 sendEmail(email);
               }
             }}
             type="button"
+            ref={completeButtonRef}
             className="justify-center 
             my-1
             border-transparent 
